@@ -13,12 +13,15 @@ RSpec.describe Product, type: :model do
   end
 
   describe 'scopes' do
-    let!(:cheap_product) { create(:product, price: 10.0) }
-    let!(:expensive_product) { create(:product, price: 250.0) }
+    let(:cheap_product) { create(:product, price: 10.0) }
+    let(:expensive_product) { create(:product, price: 25.0) }
 
     describe '.price_greater_than' do
       it 'returns products with price greater than specified' do
-        expect(described_class.price_greater_than(150)).to include(expensive_product)
+        expect(described_class.price_greater_than(15)).to include(expensive_product)
+      end
+
+      it 'does not returns products with price smaller than specified' do
         expect(described_class.price_greater_than(15)).not_to include(cheap_product)
       end
     end
