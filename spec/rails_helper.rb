@@ -14,7 +14,6 @@ require 'factory_bot_rails'
 require 'faker'
 require 'database_cleaner/active_record'
 require "json_matchers/rspec"
-require './spec/support/request_helpers.rb'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -29,7 +28,7 @@ require './spec/support/request_helpers.rb'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
+Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -76,6 +75,7 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include RequestHelpers, type: :request
+  config.include SchemaHelpers, type: :request
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
@@ -96,4 +96,4 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-JsonMatchers.schema_root = "spec/support/api/v1/schemas"
+JsonMatchers.schema_root = "spec/support/api/schemas"

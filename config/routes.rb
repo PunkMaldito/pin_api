@@ -1,10 +1,28 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  health_check = proc { [ 200, { "Content-Type" => "application/json" }, [ { status: "OK" }.to_json ] ] }
+  get "up", to: ->(env) { health_check.call(env) }
+  get "health", to: "health#show"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  namespace :api do
+    namespace :v1 do
+      post "auth/login", to: "auth#login"
+      post "auth/signup", to: "auth#signup"
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+      resources :products do
+        member do
+          post :sell
+          post :build
+        end
+
+        collection do
+          get :low_stock
+          get :out_of_stock
+        end
+      end
+    end
+  end
+
+  match "*path", to: ->(env) {
+    [ 404, { "Content-Type" => "application/json" }, [ { error: "Route not found" }.to_json ] ]
+  }, via: :all
 end
