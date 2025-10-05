@@ -10,6 +10,10 @@ gem "solid_cable"
 gem "bootsnap", require: false
 gem "kamal", require: false
 gem "thruster", require: false
+gem "jwt"
+gem "pundit"
+gem "bcrypt"
+gem "pagy"
 gem "rack-cors"
 gem "jsonapi-serializer"
 

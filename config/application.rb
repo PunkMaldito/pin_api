@@ -40,5 +40,19 @@ module PinApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.debug_exception_response_format = :api
+    config.action_controller.default_protect_from_forgery = true
+    config.active_support.key_generator_hash_digest_class = OpenSSL::Digest::SHA256
+    config.active_record.verify_foreign_keys_for_fixtures = false
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins "*"
+        resource "*",
+          headers: :any,
+          methods: [ :get, :post, :put, :patch, :delete, :options, :head ],
+          expose: [ "Authorization" ]
+      end
+    end
   end
 end
