@@ -1,0 +1,19 @@
+{
+    "type": "object",
+    "required": ["id", "type", "attributes"],
+    "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["product"] },
+        "attributes": {
+            "type": "object",
+            "required": ["name", "stock", "price"],
+            "properties": {
+                "name": { "type": "string" },
+                "stock": { "type": "integer" },
+                "price": { "type": "number" },
+                "created_at": { "type": "string" },
+                "updated_at": { "type": "string" }
+            }
+        }
+    }
+}

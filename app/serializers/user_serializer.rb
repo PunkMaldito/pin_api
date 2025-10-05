@@ -1,7 +1,8 @@
 class UserSerializer
   include JSONAPI::Serializer
 
-  attributes :id, :name, :email, :role, :created_at
+  set_type :user
+  attributes :name, :email, :role, :created_at
 
   attribute :permissions do |user|
     {

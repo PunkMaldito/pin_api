@@ -10,7 +10,7 @@ module Api
           token = JsonWebToken.encode(user_id: user.id)
           render json: {
             token: token,
-            user: UserSerializer.new(user).serializable_hash
+            user: UserSerializer.new(user).serializable_hash[:data]
           }, status: :ok
         else
           render json: { error: "Invalid credentials" }, status: :unauthorized
@@ -24,7 +24,7 @@ module Api
           token = JsonWebToken.encode(user_id: user.id)
           render json: {
             token: token,
-            user: UserSerializer.new(user).serializable_hash
+            user: UserSerializer.new(user).serializable_hash[:data]
           }, status: :created
         else
           render json: { errors: user.errors.full_messages }, status: :unprocessable_entity

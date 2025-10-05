@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include ExceptionHandler
   include Pundit::Authorization
+  include Pagy::Backend
 
   before_action :authenticate_user!
 

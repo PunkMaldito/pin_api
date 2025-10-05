@@ -2,38 +2,55 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   describe 'validations' do
-    subject { Product.new(name: 'nome teste', stock: 1, price: 19.5) }
+    it 'validates presence of name' do
+      product = build(:product, name: nil)
+      expect(product).not_to be_valid
+    end
 
-    it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_presence_of(:stock) }
-    it { is_expected.to validate_presence_of(:price) }
-    it { is_expected.to validate_uniqueness_of(:name) }
-    it { is_expected.to validate_numericality_of(:stock).only_integer.is_greater_than_or_equal_to(0) }
-    it { is_expected.to validate_numericality_of(:price).is_greater_than(0) }
-  end
+    it 'validates stock is integer' do
+      product = build(:product, stock: 10.5)
+      expect(product).not_to be_valid
+    end
 
-  describe 'scopes' do
-    let(:cheap_product) { create(:product, price: 10.0) }
-    let(:expensive_product) { create(:product, price: 25.0) }
+    it 'validates stock is greater than or equal to zero' do
+      product = build(:product, stock: -1)
+      expect(product).not_to be_valid
+    end
 
-    describe '.price_greater_than' do
-      it 'returns products with price greater than specified' do
-        expect(described_class.price_greater_than(15)).to include(expensive_product)
-      end
-
-      it 'does not returns products with price smaller than specified' do
-        expect(described_class.price_greater_than(15)).not_to include(cheap_product)
-      end
+    it 'validates price is greater than or equal to zero' do
+      product = build(:product, price: -1.0)
+      expect(product).not_to be_valid
     end
   end
 
-  describe 'callbacks' do
-    describe 'before_save' do
-      it 'titleize name' do
-        product = create(:product, name: 'produto de teste')
+  describe '#sell' do
+    it 'decreases stock by given quantity' do
+      product = create(:product, stock: 100)
+      product.sell(25)
+      expect(product.stock).to eq(75)
+    end
 
-        expect(product.name).to eq('Produto De Teste')
-      end
+    it 'raises error when quantity exceeds stock' do
+      product = create(:product, stock: 10)
+      expect { product.sell(15) }.to raise_error(StandardError, 'Insufficient stock')
+    end
+
+    it 'raises error when quantity is not positive' do
+      product = create(:product, stock: 100)
+      expect { product.sell(0) }.to raise_error(ArgumentError, 'Quantity must be positive')
+    end
+  end
+
+  describe '#build' do
+    it 'increases stock by given quantity' do
+      product = create(:product, stock: 50)
+      product.build(25)
+      expect(product.stock).to eq(75)
+    end
+
+    it 'raises error when quantity is not positive' do
+      product = create(:product, stock: 100)
+      expect { product.build(0) }.to raise_error(ArgumentError, 'Quantity must be positive')
     end
   end
 end

@@ -13,11 +13,6 @@ Rails.application.routes.draw do
           post :sell
           post :build
         end
-
-        collection do
-          get :low_stock
-          get :out_of_stock
-        end
       end
     end
   end
