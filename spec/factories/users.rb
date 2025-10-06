@@ -2,19 +2,19 @@ FactoryBot.define do
   factory :user do
     name { Faker::Name.name }
     email { Faker::Internet.unique.email }
-    password { 'password123' }
-    role { 'seller' }
+    password { "password123" }
+    role { "seller" }
 
     trait :seller do
-      role { 'seller' }
+      role { "seller" }
     end
 
     trait :builder do
-      role { 'builder' }
+      role { "builder" }
     end
 
     trait :admin do
-      role { 'admin' }
+      role { "admin" }
     end
   end
 end

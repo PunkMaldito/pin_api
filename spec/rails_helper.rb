@@ -13,7 +13,6 @@ require 'shoulda/matchers'
 require 'factory_bot_rails'
 require 'faker'
 require 'database_cleaner/active_record'
-require "json_matchers/rspec"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -75,7 +74,6 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include RequestHelpers, type: :request
-  config.include SchemaHelpers, type: :request
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
@@ -95,5 +93,3 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
-
-JsonMatchers.schema_root = "spec/support/api/schemas"

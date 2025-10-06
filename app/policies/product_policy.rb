@@ -20,16 +20,10 @@ class ProductPolicy < ApplicationPolicy
   end
 
   def sell?
-    user.can_sell?
+    user.seller? || user.admin?
   end
 
   def build?
-    user.can_build?
-  end
-
-  class Scope < Scope
-    def resolve
-      scope.all
-    end
+    user.builder? || user.admin?
   end
 end

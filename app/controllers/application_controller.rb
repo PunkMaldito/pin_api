@@ -1,15 +1,11 @@
 class ApplicationController < ActionController::API
-  include ExceptionHandler
   include Pundit::Authorization
-  include Pagy::Backend
 
   before_action :authenticate_user!
 
   attr_reader :current_user
 
-  rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
-  rescue_from ActiveRecord::RecordNotUnique, with: :render_conflict
-  rescue_from ActionController::ParameterMissing, with: :render_bad_request
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   private
 
@@ -21,21 +17,13 @@ class ApplicationController < ActionController::API
       decoded = JsonWebToken.decode(token)
       @current_user = User.find(decoded[:user_id])
     else
-      raise ExceptionHandler::MissingToken, "Missing token"
+      render json: { error: "Missing token" }, status: :unauthorized
     end
-  rescue ActiveRecord::RecordNotFound, JWT::DecodeError
-    raise ExceptionHandler::InvalidToken, "Invalid token"
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Invalid token" }, status: :unauthorized
   end
 
-  def render_unprocessable_entity(exception)
-    render json: { error: exception.message }, status: :unprocessable_entity
-  end
-
-  def render_conflict(exception)
-    render json: { error: "Resource already exists" }, status: :conflict
-  end
-
-  def render_bad_request(exception)
-    render json: { error: exception.message }, status: :bad_request
+  def user_not_authorized
+    render json: { error: "Access denied" }, status: :forbidden
   end
 end

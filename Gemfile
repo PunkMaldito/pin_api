@@ -13,7 +13,6 @@ gem "thruster", require: false
 gem "jwt"
 gem "pundit"
 gem "bcrypt"
-gem "pagy"
 gem "rack-cors"
 gem "jsonapi-serializer"
 
@@ -29,5 +28,4 @@ end
 group :test do
   gem "shoulda-matchers", "~> 6.0"
   gem "database_cleaner-active_record", "~> 2.1"
-  gem "json_matchers"
 end

@@ -1,24 +1,24 @@
 module ProductOperations
-  class SellService < BaseService
+  class SellService
+    Result = Struct.new(:success?, :product, :error)
+
+    def self.call(product, quantity)
+      new(product, quantity).call
+    end
+
     def initialize(product, quantity)
       @product = product
-      @quantity = quantity
+      @quantity = quantity.to_i
     end
 
     def call
-      validate_quantity
       return Result.new(false, nil, "Quantity must be positive") unless @quantity.positive?
+      return Result.new(false, nil, "Insufficient stock") if @quantity > @product.stock
 
-      @product.sell(@quantity)
+      @product.update!(stock: @product.stock - @quantity)
       Result.new(true, @product, nil)
-    rescue StandardError => e
+    rescue => e
       Result.new(false, nil, e.message)
-    end
-
-    private
-
-    def validate_quantity
-      @quantity = @quantity.to_i
     end
   end
 end
