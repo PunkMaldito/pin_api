@@ -80,7 +80,7 @@ GEM
     bcrypt_pbkdf (1.1.1-x86_64-darwin)
     benchmark (0.4.1)
     bigdecimal (3.2.3)
-    bootsnap (1.18.6)
+    bootsnap (1.19.0)
       msgpack (~> 1.2)
     brakeman (7.1.0)
       racc
@@ -124,9 +124,6 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.15.0)
-    json_matchers (0.11.1)
-      json_schema
-    json_schema (0.21.0)
     jsonapi-serializer (2.2.0)
       activesupport (>= 4.2)
     jwt (3.1.2)
@@ -189,7 +186,6 @@ GEM
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
     ostruct (0.6.3)
-    pagy (9.4.0)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
@@ -377,11 +373,9 @@ DEPENDENCIES
   debug
   factory_bot_rails (~> 6.4)
   faker (~> 3.5)
-  json_matchers
   jsonapi-serializer
   jwt
   kamal
-  pagy
   pg (~> 1.1)
   puma (>= 5.0)
   pundit
